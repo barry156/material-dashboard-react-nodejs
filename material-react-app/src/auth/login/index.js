@@ -30,6 +30,7 @@ import AuthService from "services/auth-service";
 import { AuthContext } from "context";
 
 function Login() {
+  console.log('function login is aufgerufen');
   const authContext = useContext(AuthContext);
 
   const [user, setUser] = useState({});
@@ -59,6 +60,7 @@ function Login() {
 
   const submitHandler = async (e) => {
     // check rememeber me?
+
     e.preventDefault();
 
     const mailFormat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;

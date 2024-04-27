@@ -3,12 +3,12 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import dotenv from "dotenv";
 import "./passport.js";
-import { dbConnect } from "./mongo";
-import { meRoutes, authRoutes } from "./routes";
+import { dbConnect } from "./mongo/index.js";
+import { meRoutes, authRoutes } from "./routes/index.js";
 import path from "path";
 import * as fs from "fs";
 import cron from "node-cron";
-import ReseedAction from "./mongo/ReseedAction";
+import ReseedAction from "./mongo/ReseedAction.js";
 
 dotenv.config();
 
@@ -29,7 +29,16 @@ const corsOptions = {
 
 dbConnect();
 
-app.use(cors(corsOptions));
+//app.use(cors(corsOptions));
+
+app.use(cors());
+app.use((_req, res, next) => {
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
+        res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+        next();
+});
+
 app.use(bodyParser.json({ type: "application/vnd.api+json", strict: false }));
 
 app.get("/", function (req, res) {

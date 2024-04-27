@@ -230,5 +230,13 @@ DefaultNavbar.propTypes = {
     }),
   ]),
 };
+// code ajouté par Mamadou
+DefaultNavbar.defaultProps = {
+  transparent: false,
+  // Définir une valeur par défaut pour la prop light
+  light: true, // ou false selon vos besoins
+  action: false,
+};
+// code ajouté par Mamadou
 
 export default DefaultNavbar;
