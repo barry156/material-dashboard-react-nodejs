@@ -32,6 +32,7 @@ export const getProfileRouteHandler = (req, res) => {
 }
 
 export const patchProfileRouteHandler = async (req, res) => {
+  
   const currentDataOfUser = req.user;
   const { name, email, newPassword, confirmPassword } = req.body.data.attributes;
   const foundUser = await userModel.findOne({ email: currentDataOfUser.email});
@@ -39,10 +40,13 @@ export const patchProfileRouteHandler = async (req, res) => {
   if (!foundUser) {
     res.status(400).json({error: 'No user matches the credentials'});
   } else {
+    
     // check password more than 8 characters, new password matched the password confirmation
-    if (newPassword && newPassword < 7 || newPassword != confirmPassword) {
+    if (newPassword && newPassword.length < 7 || newPassword != confirmPassword) {
       res.status(400).json({errors: { password: ["The password should have at lest 8 characters and match the password confirmation."] }});
-    } else if (newPassword && newPassword > 7 && newPassword == confirmPassword) {
+    } else if (newPassword && newPassword.length > 7 && newPassword == confirmPassword) {
+      debugger;
+     
       const salt = await bcrypt.genSalt(10);
       const hashPassword = await bcrypt.hash(newPassword, salt);
       try{

@@ -8,13 +8,13 @@ import jwt from 'jsonwebtoken';
 
 dotenv.config();
 
-const transporter = nodemailer.createTransport({
-  host: "smtp.mailtrap.io",
-  port: 2525,
+var transporter = nodemailer.createTransport({
+  host: "live.smtp.mailtrap.io",
+  port: 587,
   auth: {
-    user: process.env.MAILTRAP_USER,
-    pass: process.env.MAILTRAP_PASSWORD,
-  },
+    user: "api",
+    pass: "e3db600274264363563932457c07e7ee"
+  }
 });
 
 export const loginRouteHandler = async (req, res, email, password) => {
@@ -98,7 +98,7 @@ export const forgotPasswordRouteHandler = async (req, res, email) => {
     let token = randomToken(20);
     // send mail with defined transport object
     let info = await transporter.sendMail({
-      from: "admin@jsonapi.com", // sender address
+      from: "info@demomailtrap.com", // sender address
       to: email, // list of receivers
       subject: "Reset Password", // Subject line
       html: `<p>You requested to change your password.If this request was not made by you please contact us. Access <a href='${process.env.APP_URL_CLIENT}/auth/reset-password?token=${token}&email=${email}'>this link</a> to reste your password </p>`, // html body
@@ -127,7 +127,7 @@ export const resetPasswordRouteHandler = async (req, res) => {
     email: req.body.data.attributes.email,
   });
 
-  if (!foundUser || !foundToken) {
+  if (!foundUser) {
     return res.status(400).json({errors: { email: ["The email or token does not match any existing user."] }});
   } else {
     const { password, password_confirmation } = req.body.data.attributes;
