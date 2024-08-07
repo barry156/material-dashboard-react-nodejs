@@ -11,3 +11,5 @@ async function clear() {
 clear().then(() => {
   mongoose.connection.close();
 });
+//write a me programm that will me the number of days in a year
+

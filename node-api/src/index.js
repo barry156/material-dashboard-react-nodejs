@@ -9,11 +9,15 @@ import path from "path";
 import * as fs from "fs";
 import cron from "node-cron";
 import ReseedAction from "./mongo/ReseedAction.js";
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
 
 dotenv.config();
 
 const PORT = process.env.PORT || 8080;
 const app = express();
+
+
 
 const whitelist = [process.env.APP_URL_CLIENT];
 const corsOptions = {
@@ -44,14 +48,17 @@ app.use(bodyParser.json({ type: "application/vnd.api+json", strict: false }));
 app.get("/", function (req, res) {
   const __dirname = fs.realpathSync(".");
   res.sendFile(path.join(__dirname, "/src/landing/index.html"));
+  
 });
+const __dirname = fs.realpathSync(".");
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
 app.use("/", authRoutes);
 app.use("/me", meRoutes);
 
 if (process.env.SCHEDULE_HOUR) {
-  cron.schedule(`0 */${process.env.SCHEDULE_HOUR} * * *'`, () => {
-    ReseedAction();
+  cron.schedule(`0 */${process.env.SCHEDULE_HOUR} * * *`, () => {
+      ReseedAction();
   });
 }
 

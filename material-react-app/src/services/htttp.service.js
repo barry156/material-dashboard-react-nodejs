@@ -24,6 +24,15 @@ export class HttpService {
 
   delete = async (url) => await this.request(this.getOptionsConfig("delete", url));
 
+  /*uploadFile = async (url, file) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    return await this.request(this.getOptionsConfig("post", url, formData));
+  };*/
+  uploadFile = async (url, data) => {
+    return await this.request(this.getOptionsConfig("post", url, data));
+  };
+
   getOptionsConfig = (method, url, data) => {
     return {
       method,

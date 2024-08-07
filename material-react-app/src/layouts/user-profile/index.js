@@ -22,6 +22,7 @@ const UserProfile = () => {
   const [user, setUser] = useState({
     name: "",
     email: "",
+    profil_image: "",
     newPassword: "",
     confirmPassword: "",
   });
@@ -139,7 +140,7 @@ const UserProfile = () => {
     <DashboardLayout>
       <DashboardNavbar />
       <MDBox mb={2} />
-      <Header name={user.name}>
+     <Header name={user.name}>
         {notification && (
           <MDAlert color="info" mt="20px">
             <MDTypography variant="body2" color="white">

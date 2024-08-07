@@ -17,10 +17,12 @@ import { useState, useEffect } from "react";
 
 // prop-types is a library for typechecking of props.
 import PropTypes from "prop-types";
+import AuthService from "../../../services/auth-service";
 
 // @mui material components
 import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid";
+import Button  from '@mui/material/Button';
 
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
@@ -34,9 +36,16 @@ import breakpoints from "assets/theme/base/breakpoints";
 import burceMars from "assets/images/bruce-mars.jpg";
 import backgroundImage from "assets/images/bg-profile.jpeg";
 
-function Header({ name, children }) {
+import Input from "@mui/material/Input";
+import InputLabel from "@mui/material/InputLabel";
+import FormControl from "@mui/material/FormControl";
+import FormHelperText from "@mui/material/FormHelperText";
+import authService from "../../../services/auth-service";
+
+function Header({ name, profil_image , children }) {
   const [tabsOrientation, setTabsOrientation] = useState("horizontal");
   const [tabValue, setTabValue] = useState(0);
+  const [profileImage, setProfileImage] = useState("");
 
   useEffect(() => {
     // A function that sets the orientation state of the tabs.
@@ -59,6 +68,31 @@ function Header({ name, children }) {
   }, [tabsOrientation]);
 
   const handleSetTabValue = (event, newValue) => setTabValue(newValue);
+  const handleFileChange = async (e) => {
+    if (e.target.files.length === 0) {
+      console.error("No file selected.");
+      return;
+    }
+  
+    try {
+      const formData = new FormData();
+      debugger;
+      formData.append("profileImage", e.target.files[0]);
+      console.log(formData); // Ajoute l'image sélectionnée au FormData
+  
+      // Envoie une requête POST à l'API pour mettre à jour l'image de profil
+      const response = await authService.changeProfileImage(formData);
+      console.log(response);
+      if(response.status === 200) {
+        setProfileImage(response.data.profile_image);
+      }
+  
+      console.log(response.data); // Affiche la réponse de l'API (peut-être un message de succès)
+    } catch (error) {
+      console.error("Error updating profile image:", error);
+    }
+  };
+
 
   return (
     <MDBox position="relative" mb={5}>
@@ -90,7 +124,7 @@ function Header({ name, children }) {
       >
         <Grid container spacing={3} alignItems="center">
           <Grid item>
-            <MDAvatar src={burceMars} alt="profile-image" size="xl" shadow="sm" />
+            <MDAvatar src={profil_image} alt="profile-image" size="xl" shadow="sm" />
           </Grid>
           <Grid item>
             <MDBox height="100%" mt={0.5} lineHeight={1}>
@@ -101,6 +135,16 @@ function Header({ name, children }) {
                 CEO / Co-Founder
               </MDTypography>
             </MDBox>
+          </Grid>
+          <Grid item>
+          <FormControl>
+              <InputLabel htmlFor="file-input"></InputLabel>
+              <Input id="file-input" type="file" onChange={handleFileChange} />
+              <FormHelperText>Change  your profile image</FormHelperText>
+            </FormControl>
+            <Button variant="outlined" color="info" style={{ marginLeft: 10 }}>
+              save
+            </Button>
           </Grid>
         </Grid>
         {children}
