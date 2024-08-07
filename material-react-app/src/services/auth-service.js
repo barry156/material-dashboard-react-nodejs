@@ -37,6 +37,10 @@ class AuthService {
     const updateProfile = "me";
     return await HttpService.patch(updateProfile, newInfo);
   }
+  changeProfileImage = async (newImage) => {
+    const changeProfileImage = "me";
+    return await HttpService.post(changeProfileImage, newImage);
+  }
 }
 
 export default new AuthService();

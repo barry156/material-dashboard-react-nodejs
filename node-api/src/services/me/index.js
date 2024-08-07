@@ -32,7 +32,6 @@ export const getProfileRouteHandler = (req, res) => {
 }
 
 export const patchProfileRouteHandler = async (req, res) => {
-  debugger
   
   const currentDataOfUser = req.user;
   const { name, email, newPassword, confirmPassword } = req.body.data.attributes;

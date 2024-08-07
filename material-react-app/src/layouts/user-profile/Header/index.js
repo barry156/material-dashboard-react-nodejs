@@ -76,7 +76,6 @@ function Header({ name, profil_image , children }) {
   
     try {
       const formData = new FormData();
-      debugger;
       formData.append("profileImage", e.target.files[0]);
       console.log(formData); // Ajoute l'image sélectionnée au FormData
   
