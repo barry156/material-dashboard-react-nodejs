@@ -2,6 +2,7 @@ import express from "express";
 import passport from "passport";
 import jwt from 'jsonwebtoken';
 import upload from '../multerConfig.js';
+import { userModel } from "../../schemas/user.schema.js";
 
 
 
@@ -31,10 +32,11 @@ router.post('/', passport.authenticate('jwt', {session: false}), upload.single('
       return res.status(404).json({error: 'User not found'});
     }
 
-    user.profileImage = file.path;
-    // Reste du code...
+    user.profile_image = file.path;
+    await user.save();
+    res.status(200).json({message: 'Profile image updated successfully'});
   } catch (error) {
-    // Gestion des erreurs...
+    console.error('Error updating profile image:', error);
   }
 });
 export default router;
